@@ -1,17 +1,39 @@
 ########################################################
 # Step 1: Establish the layers
 
-# In this section of the file, as a series of comments,
+# Question:
+# 1. In this section of the file, as a series of comments,
 # create a list of the layers you identify.
-# Which layers are nested in each other?
-# Which layers of data "have" within it a different layer?
-# Which layers are "next" to each other?
+# 2. Which layers are nested in each other?
+# 3. Which layers of data "have" within it a different layer?
+# 4. Which layers are "next" to each other?
+
+# Answers:
+# 1. drivers, rides per driver, possibly details of each ride
+# (date, cost, rider id, rating)
+# 2. rides are driver specific and the information about each
+# ride is ride-specific
+# 3. ride information is nested by driver id, and within this,
+# ride information could be nested by ride number
+# 4. for a given driver, the ride information for each ride
+# will be in the same layer
 
 ########################################################
 # Step 2: Assign a data structure to each layer
 
+# Question:
 # Copy your list from above, and in this section
 # determine what data structure each layer should have
+
+# Answer:
+# Layers - drivers, rides per driver, possibly details of each ride
+# (date, cost, rider id, rating)
+# All driver info can be stored in a large hash
+# where each key will correspond to a driver, and each value
+# will be an array of hashes. With this array of hashes,
+# Each hash will have ride-specific information
+# where the keys indicate the ride number, and the value is an array
+# with the date, cost, rider id, and rating of that ride
 
 ########################################################
 # Step 3: Make the data structure!
@@ -58,19 +80,11 @@ def summarize_driver(nested_hash, driver, value_index)
   # summarize a given parameter for a given driver
   # value index is the index of the item of interest
   # in the ride-specific array per driver
-  summary_list = []
-  nested_hash[:"#{driver}"].each do |ride|
-    value = ride.values[0][value_index]
-    summary_list.push(value)
-  end
-  return summary_list
+  return nested_hash[:"#{driver}"].map{|ride| ride.values[0][value_index]}
 end
 
 # the number of rides each driver has given
-driver_hash.each_key do |key|
-  rides = driver_hash[:"#{key}"].length
-  puts "Driver #{key} has #{rides} rides"
-end
+driver_hash.map {|k, v| puts "Driver #{k} gave #{v.length} rides"}
 
 # the total amount of money each driver has made
 max_earnings = {}
