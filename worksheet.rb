@@ -109,3 +109,14 @@ puts "Driver #{max_earner} made the most money"
 # Which driver has the highest average rating?
 max_avg = avg_ratings.max_by{|k,v| v}[0].to_s
 puts "Driver #{max_avg} had the highest average rating"
+
+# Optional: For each driver, on which day did they make the most money?
+# driver_hash.each_key do |key|
+#   date_hash = {}
+#   driver_hash[:"#{key}"].each do |ride|
+#     date = ride.values[0][0]
+#     # this breaks if they have more than one ride on the same day
+#     date_hash[:"#{date}"] = ride.values[0][1]
+#   end
+#   puts "Driver #{key} earned the most money on #{date_hash.max_by{|k, v| v}[0].to_s}"
+# end
