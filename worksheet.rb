@@ -1,3 +1,4 @@
+require "awesome_print"
 ########################################################
 # Step 1: Establish the layers
 
@@ -44,6 +45,7 @@
 # You should be copying and pasting the literal data
 # into this data structure, such as "DR0004"
 # and "3rd Feb 2016" and "RD0022"
+
 driver_hash = {
     DR0001: [
         {ride_1: ["3rd Feb 2016", 10, "RD0003", 3]},
@@ -76,13 +78,14 @@ driver_hash = {
 # - Which driver made the most money?
 # - Which driver has the highest average rating?
 
+
 def summarize_driver(nested_hash, driver, value_index)
   # summarize a given parameter for a given driver
   return nested_hash[:"#{driver}"].map{|ride| ride.values[0][value_index]}
 end
 
 # the number of rides each driver has given
-driver_hash.map {|k, v| puts "Driver #{k} gave #{v.length} rides"}
+driver_hash.map {|k, v| ap "Driver #{k} gave #{v.length} rides", color: {string: :yellow}}
 
 # the total amount of money each driver has made
 max_earnings = {}
@@ -90,7 +93,7 @@ driver_hash.each_key do |key|
   costs = summarize_driver(driver_hash, key, 1)
   max_earnings[:"#{key}"] = costs.sum
 end
-max_earnings.each { |key, value| puts "Driver #{key} made $#{value}"}
+max_earnings.each { |key, value| ap "Driver #{key} made $#{value}", color: {string: :greenish}}
 
 # the average rating for each driver
 avg_ratings = {}
@@ -98,15 +101,15 @@ driver_hash.each_key do |key|
   ratings = summarize_driver(driver_hash, key, -1)
   avg_ratings[:"#{key}"] = ratings.sum/ratings.length.to_f
 end
-avg_ratings.each { |key, value| puts "Driver #{key} had an average rating of #{value.round(1)}"}
+avg_ratings.each { |key, value| ap "Driver #{key} had an average rating of #{value.round(1)}", color: {string: :red}}
 
 # Which driver made the most money?
 max_earner = max_earnings.max_by{|k,v| v}[0].to_s
-puts "Driver #{max_earner} made the most money"
+ap "Driver #{max_earner} made the most money" , color: {string: :blue}
 
 # Which driver has the highest average rating?
 max_avg = avg_ratings.max_by{|k,v| v}[0].to_s
-puts "Driver #{max_avg} had the highest average rating"
+ap "Driver #{max_avg} had the highest average rating", color: {string: :purpleish}
 
 # Optional: For each driver, on which day did they make the most money?
 driver_hash.each_key do |key|
@@ -119,5 +122,5 @@ driver_hash.each_key do |key|
       date_hash[:"#{date}"] = ride.values[0][1]
     end
   end
-  puts "Driver #{key} earned the most money on #{date_hash.max_by{|k, v| v}[0].to_s}"
+  ap "Driver #{key} earned the most money on #{date_hash.max_by{|k, v| v}[0].to_s}"
 end
